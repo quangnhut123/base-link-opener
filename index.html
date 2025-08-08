@@ -7,28 +7,29 @@
 <body>
   <p>Opening your links...</p>
   <script>
-    function getUrlsFromQuery() {
+    // Parse query parameter ?ids=123,456
+    function getIdsFromQuery() {
       const params = new URLSearchParams(window.location.search);
-      const raw = params.get('urls');
+      const raw = params.get('ids');
       if (!raw) return [];
-      return raw.split(',').map(decodeURIComponent).filter(url => url.startsWith('http'));
+      return raw.split(',').map(id => id.trim()).filter(id => id.length > 0);
     }
 
-    const urls = getUrlsFromQuery();
+    const ids = getIdsFromQuery();
 
-    if (urls.length > 0) {
-      urls.forEach(url => {
+    if (ids.length > 0) {
+      ids.forEach(id => {
+        const url = `https://request.base.vn/requests?request=${encodeURIComponent(id)}`;
         window.open(url, '_blank');
       });
 
-      // Show a message instead of closing the window
+      // Close this window after short delay to allow tabs to open
       setTimeout(() => {
-        document.body.innerHTML = "<p>Links opened in new tabs.<br>You may close this window.</p>";
-      }, 100);
+        window.close();
+      }, 1000);
     } else {
-      document.body.innerHTML = "<p>No valid URLs provided.</p>";
+      document.body.innerHTML = "<p>No valid IDs provided.</p>";
     }
   </script>
 </body>
 </html>
-
