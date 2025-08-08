@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Opening Links...</title>
+  <meta charset="UTF-8">
+</head>
+<body>
+  <p>Opening your links...</p>
+  <script>
+    function getUrlsFromQuery() {
+      const params = new URLSearchParams(window.location.search);
+      const raw = params.get('urls');
+      if (!raw) return [];
+      return raw.split(',').map(decodeURIComponent).filter(url => url.startsWith('http'));
+    }
+
+    const urls = getUrlsFromQuery();
+
+    if (urls.length > 0) {
+      urls.forEach(url => {
+        window.open(url, '_blank');
+      });
+
+      // Show a message instead of closing the window
+      setTimeout(() => {
+        document.body.innerHTML = "<p>Links opened in new tabs.<br>You may close this window.</p>";
+      }, 100);
+    } else {
+      document.body.innerHTML = "<p>No valid URLs provided.</p>";
+    }
+  </script>
+</body>
+</html>
+
